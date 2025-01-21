@@ -2,15 +2,16 @@ from fastapi import FastAPI
 from fastapi.requests import Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from pathlib import Path
+import uvicorn
 
-# Get the base directory of your application
-BASE_DIR = Path(__file__).resolve().parent
-
-# Initialize templates with absolute path
-templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
+templates = Jinja2Templates("templates")
 app = FastAPI()
+
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
